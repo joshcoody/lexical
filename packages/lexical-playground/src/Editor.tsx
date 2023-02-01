@@ -6,6 +6,7 @@
  *
  */
 
+import {$convertToMarkdownString, TRANSFORMERS} from '@lexical/markdown';
 import {AutoFocusPlugin} from '@lexical/react/LexicalAutoFocusPlugin';
 import {CharacterLimitPlugin} from '@lexical/react/LexicalCharacterLimitPlugin';
 import {CheckListPlugin} from '@lexical/react/LexicalCheckListPlugin';
@@ -16,6 +17,7 @@ import {HashtagPlugin} from '@lexical/react/LexicalHashtagPlugin';
 import {HistoryPlugin} from '@lexical/react/LexicalHistoryPlugin';
 import {HorizontalRulePlugin} from '@lexical/react/LexicalHorizontalRulePlugin';
 import {ListPlugin} from '@lexical/react/LexicalListPlugin';
+import {OnChangePlugin} from '@lexical/react/LexicalOnChangePlugin';
 import {PlainTextPlugin} from '@lexical/react/LexicalPlainTextPlugin';
 import {RichTextPlugin} from '@lexical/react/LexicalRichTextPlugin';
 import {TabIndentationPlugin} from '@lexical/react/LexicalTabIndentationPlugin';
@@ -162,6 +164,16 @@ export default function Editor(): JSX.Element {
             <ListMaxIndentLevelPlugin maxDepth={7} />
             <TablePlugin />
             <TableCellResizer />
+            <OnChangePlugin
+              onChange={(editorState) => {
+                editorState.read(() => {
+                  const currentValue = $convertToMarkdownString(TRANSFORMERS);
+                  const json = editorState.toJSON();
+                  // eslint-disable-next-line no-console
+                  console.log({currentValue, editorState, json});
+                });
+              }}
+            />
             <NewTablePlugin cellEditorConfig={cellEditorConfig}>
               <AutoFocusPlugin />
               <RichTextPlugin
